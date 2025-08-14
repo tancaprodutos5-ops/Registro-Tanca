@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#007bff">
+<title>Registro de Cliques</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: #f2f2f2;
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("Service Worker registrado"))
+      .catch(err => console.error("Erro ao registrar SW:", err));
+  }
+</script>
+
+    }
+    .botoes {
+        display: flex;
+        gap: 10px;
+    }
+    button {
+        padding: 15px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .registrar {
+        background: #007bff;
+        color: white;
+    }
+    .registrar:hover {
+        background: #0056b3;
+    }
+    .limpar {
+        background: #dc3545;
+        color: white;
+    }
+    .limpar:hover {
+        background: #a71d2a;
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+    li {
+        background: white;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    }
+</style>
+</head>
+<body>
+ 
+<h2>Registros</h2>
+<div class="botoes">
+    <button class="registrar" onclick="registrar()">Registrar Data/Hora</button>
+    <button class="limpar" onclick="limpar()">Limpar Registros</button>
+</div>
+ 
+<ul id="lista"></ul>
+ 
+<script>
+    let registros = JSON.parse(localStorage.getItem("registros")) || [];
+ 
+    function atualizarLista() {
+        let lista = document.getElementById("lista");
+        lista.innerHTML = "";
+        registros.forEach(item => {
+            let li = document.createElement("li");
+            li.textContent = item;
+            lista.appendChild(li);
+        });
+    }
+ 
+    function registrar() {
+        let agora = new Date();
+        let dataHora = agora.toLocaleDateString("pt-BR") + " " + agora.toLocaleTimeString("pt-BR");
+        registros.unshift(dataHora);
+        localStorage.setItem("registros", JSON.stringify(registros));
+        atualizarLista();
+    }
+ 
+    function limpar() {
+        if (confirm("Tem certeza que deseja apagar todos os registros?")) {
+            registros = [];
+            localStorage.removeItem("registros");
+            atualizarLista();
+        }
+    }
+ 
+    atualizarLista();
+</script>
+ 
+</body>
+</html>
